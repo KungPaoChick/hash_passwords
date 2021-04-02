@@ -15,15 +15,15 @@ class Logger:
             source = json.load(j_source)
 
         for info in source:
-            if self.username == info:
+            if not self.username == info:
+                print('Wrong Username.')
+            else:
                 new_key = hashlib.pbkdf2_hmac('sha256', self.password.encode('utf-8'), b64decode(source[self.username]['password'][:88].encode('utf-8')), 100000)
 
                 if b64decode(source[self.username]['password'][88:].encode('utf-8')) == new_key:
                     print('Successfully logged in.')
                 else:
                     print('Wrong Password.')
-            else:
-                print('Wrong Username.')
 
 
 if __name__ == '__main__':
