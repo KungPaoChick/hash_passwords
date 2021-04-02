@@ -22,6 +22,8 @@ class Logger:
                     print('Successfully logged in.')
                 else:
                     print('Wrong Password.')
+            else:
+                print('Wrong Username.')
 
 
 if __name__ == '__main__':
