@@ -17,7 +17,7 @@ class Register:
         salt = b64encode(os.urandom(64)).decode('utf-8')
         key = b64encode(hashlib.pbkdf2_hmac('sha256', self.password.encode(
             'utf-8'), b64decode(salt.encode('utf-8')), 100000)).decode('utf-8')
-            
+
         users[self.username] = {
             'password': salt+key,
         }
@@ -54,7 +54,8 @@ class Login:
 
 
 if __name__ == '__main__':
-    parser = argparse.ArgumentParser(description='Hash Passwords.')
+    parser = argparse.ArgumentParser(formatter_class=argparse.RawDescriptionHelpFormatter,
+                                     description='Hash Passwords.')
 
     parser.add_argument('-r', '--register',
                         nargs=2, metavar='REGISTER',
