@@ -21,6 +21,8 @@ class Register:
         }
         with open('user.json', 'w', encoding='utf-8') as f_source:
             json.dump(users, f_source, indent=2)
+            for dict in users:
+                print(f'{dict} has been added')
 
 
 class Login:
@@ -42,7 +44,7 @@ class Login:
                 if not b64decode(source[self.username]['password'][88:].encode('utf-8')) == new_key:
                     print('Wrong Password')
                 else:
-                    print('Successfully Logged In')
+                    print(f'Successfully logged in as {dict}')
 
 
 if __name__ == '__main__':
