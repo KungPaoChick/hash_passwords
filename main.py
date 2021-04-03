@@ -2,6 +2,7 @@ import hashlib
 import os
 import argparse
 import json
+import colorama
 from base64 import b64encode, b64decode
 
 
@@ -35,25 +36,34 @@ class Login:
 
     def verify_user(self):
         if not os.path.exists(os.path.join(os.getcwd(), 'user.json')):
-            print('No user. Register first.')
+            print(colorama.Fore.YELLOW,
+                  '[!] No user recorded. Register first using (-l Username Password) argument.',
+                  colorama.Style.RESET_ALL)
         else:
             with open('user.json', 'r', encoding='utf-8') as j_source:
                 source = json.load(j_source)
 
             for dict in source:
                 if not self.username == dict:
-                    print('Wrong Username')
+                    print(colorama.Fore.RED,
+                          '[!!] Authenticaion Failed! Username or Password is incorrect.',
+                          colorama.Style.RESET_ALL)
                 else:
                     new_key = hashlib.pbkdf2_hmac('sha256', self.password.encode(
                         'utf-8'), b64decode(source[self.username]['password'][:88].encode('utf-8')), 100000)
 
                     if not b64decode(source[self.username]['password'][88:].encode('utf-8')) == new_key:
-                        print('Wrong Password')
+                        print(colorama.Fore.RED,
+                              '[!!] Authentication Failed! Username or Password is incorrect.',
+                              colorama.Style.RESET_ALL)
                     else:
-                        print(f'Successfully logged in as {dict}')
+                        print(colorama.Fore.GREEN,
+                              f'[*] Autehentication Success! User {dict}',
+                              colorama.Style.RESET_ALL)
 
 
 if __name__ == '__main__':
+    colorama.init()
     parser = argparse.ArgumentParser(formatter_class=argparse.RawDescriptionHelpFormatter,
                                      description='Hash Passwords.')
 
