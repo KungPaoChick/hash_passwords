@@ -19,13 +19,17 @@ class Register:
         key = b64encode(hashlib.pbkdf2_hmac('sha256', self.password.encode(
             'utf-8'), b64decode(salt.encode('utf-8')), 100000)).decode('utf-8')
 
-        users[self.username] = {
+        users = {}
+        users['user'] = []
+
+        users['user'].append({
+            'username': self.username,
             'password': salt+key,
-        }
+        })
         with open('user.json', 'w', encoding='utf-8') as f_source:
             json.dump(users, f_source, indent=2)
-            for dict in users:
-                print(f'{dict} has been added')
+            for dict in users['user']:
+                print(f"{dict['username']} has been added")
 
 
 class Login:
@@ -43,22 +47,22 @@ class Login:
             with open('user.json', 'r', encoding='utf-8') as j_source:
                 source = json.load(j_source)
 
-            for dict in source:
-                if not self.username == dict:
+            for dict in source['user']:
+                if not self.username == dict['username']:
                     print(colorama.Fore.RED,
                           '[!!] Authenticaion Failed! Username or Password is incorrect.',
                           colorama.Style.RESET_ALL)
                 else:
                     new_key = hashlib.pbkdf2_hmac('sha256', self.password.encode(
-                        'utf-8'), b64decode(source[self.username]['password'][:88].encode('utf-8')), 100000)
+                        'utf-8'), b64decode(dict['password'][:88].encode('utf-8')), 100000)
 
-                    if not b64decode(source[self.username]['password'][88:].encode('utf-8')) == new_key:
+                    if not b64decode(dict['password'][88:].encode('utf-8')) == new_key:
                         print(colorama.Fore.RED,
                               '[!!] Authentication Failed! Username or Password is incorrect.',
                               colorama.Style.RESET_ALL)
                     else:
                         print(colorama.Fore.GREEN,
-                              f'[*] Autehentication Success! User {dict}',
+                              f"[*] Autehentication Success! User {dict['username']}",
                               colorama.Style.RESET_ALL)
 
 
