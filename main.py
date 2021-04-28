@@ -62,7 +62,7 @@ class Login:
                               colorama.Style.RESET_ALL)
                     else:
                         print(colorama.Fore.GREEN,
-                              f"[*] Autehentication Success! User {dict['username']}",
+                              f"[*] Authentication Success! User {dict['username']}",
                               colorama.Style.RESET_ALL)
 
 
