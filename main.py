@@ -1,8 +1,8 @@
-import hashlib
 import os
-import argparse
 import json
 import colorama
+from hashlib import pbkdf2_hmac
+from argparse import ArgumentParser, RawDescriptionHelpFormatter
 from base64 import b64encode, b64decode
 
 
@@ -16,7 +16,7 @@ class Register:
         users = {}
 
         salt = b64encode(os.urandom(64)).decode('utf-8')
-        key = b64encode(hashlib.pbkdf2_hmac('sha256', self.password.encode(
+        key = b64encode(pbkdf2_hmac('sha256', self.password.encode(
             'utf-8'), b64decode(salt.encode('utf-8')), 100000)).decode('utf-8')
 
         users = {}
@@ -29,7 +29,8 @@ class Register:
         with open('user.json', 'w', encoding='utf-8') as f_source:
             json.dump(users, f_source, indent=2)
             for dict in users['user']:
-                print(f"{dict['username']} has been added")
+                print(colorama.Fore.GREEN, f"[*] {dict['username']} has been added",
+                        colorama.Style.RESET_ALL)
 
 
 class Login:
@@ -53,7 +54,7 @@ class Login:
                           '[!!] Authenticaion Failed! Username or Password is incorrect.',
                           colorama.Style.RESET_ALL)
                 else:
-                    new_key = hashlib.pbkdf2_hmac('sha256', self.password.encode(
+                    new_key = pbkdf2_hmac('sha256', self.password.encode(
                         'utf-8'), b64decode(dict['password'][:88].encode('utf-8')), 100000)
 
                     if not b64decode(dict['password'][88:].encode('utf-8')) == new_key:
@@ -68,7 +69,7 @@ class Login:
 
 if __name__ == '__main__':
     colorama.init()
-    parser = argparse.ArgumentParser(formatter_class=argparse.RawDescriptionHelpFormatter,
+    parser = ArgumentParser(formatter_class=RawDescriptionHelpFormatter,
                                      description='Hash Passwords.')
 
     parser.add_argument('-r', '--register',
