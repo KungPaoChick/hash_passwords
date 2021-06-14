@@ -30,7 +30,7 @@ class Register:
             json.dump(users, f_source, indent=2)
             for dict in users['user']:
                 print(colorama.Fore.GREEN, f"[*] {dict['username']} has been added",
-                        colorama.Style.RESET_ALL)
+                      colorama.Style.RESET_ALL)
 
 
 class Login:
@@ -70,7 +70,7 @@ class Login:
 if __name__ == '__main__':
     colorama.init()
     parser = ArgumentParser(formatter_class=RawDescriptionHelpFormatter,
-                                     description='Hash Passwords.')
+                            description='Hash Passwords.')
 
     parser.add_argument('-r', '--register',
                         nargs=2, metavar='REGISTER',
